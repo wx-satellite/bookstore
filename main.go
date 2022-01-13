@@ -33,15 +33,12 @@ func main() {
 		log.Println("web server run failed：", err)
 		return
 	case <-signalChan:
-		ctx, cf := context.WithTimeout(context.Background(), time.Second)
+		ctx, cf := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cf()
-		err = srv.Shutdown(ctx)
+		if err = srv.Shutdown(ctx); err != nil {
+			log.Println("bookstore program exist err：", err)
+			return
+		}
 	}
-
-	if err != nil {
-		log.Println("bookstore program exist err：", err)
-		return
-	}
-
 	log.Println("bookstore program exist ok")
 }
